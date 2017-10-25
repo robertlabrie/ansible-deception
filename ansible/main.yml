@@ -9,6 +9,9 @@
   - name: "set flushed initial state"
     set_fact:
       flushed: false
-
+- include: root.yml
+  when:
+    - env.REQUEST_PATH == "/"
+    - flushed == false
 - include: static.yml
   when: flushed == false
