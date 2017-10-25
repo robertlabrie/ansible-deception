@@ -1,0 +1,25 @@
+- hosts:
+  - local
+  tasks:
+  - debug:
+      msg: "static asset requested {{ env.REQUEST_PATH }}"
+  - name: stat static asset
+    stat: path=../static_assets{{env.REQUEST_PATH}}
+    register: file
+  - name: copy file if it exists
+    copy: src=../static_assets{{env.REQUEST_PATH}} dest={{bodyfile}}
+    when: file.stat.exists
+  # *** apparently the copy task doesn't support when, but a copy task when named does? WTF is this garbage tool?
+  # - copy:
+  #     src: "../static_assets{{REQUEST_PATH}}"
+  #     dest: "{{bodyfile}}"
+  #     when: file.stat.exists
+  - name: "http_response_status_200"
+    set_fact:
+      http_response_status: 200
+    when: file.stat.exists
+  - name: "http_response_status_404"
+    set_fact:
+      http_response_status: 404
+    when: file.stat.exists == False
+- include: flush.yml

@@ -1,0 +1,18 @@
+- hosts:
+  - local
+  tasks:
+  - debug:
+      msg: "headerfile: {{ headerfile }} bodyfile {{ bodyfile }}"
+  # todo jinja and JMESpath is it's own special hell
+  # because if you used actual python in your templating engine then you'd be
+  # like ERB and everyone knows that copying ruby is the same as killing kittens
+  # so anyway right now we write all hostvars.local without filtering
+  # and we let sinatra clean up the mess
+  # seriously, why is this awful trash so popular??
+  - name: "write http headers"
+    template:
+      src: templates/headers.j2
+      dest: "{{headerfile}}"
+  - name: "set flushed state"
+    set_fact:
+      flushed: true
