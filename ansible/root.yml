@@ -1,0 +1,10 @@
+- hosts:
+  - local
+  tasks:
+  - debug:
+      msg: "executing root route"
+  - template:
+      src: ../template_assets/index.j2
+      dest: "{{bodyfile}}"
+      
+- include: flush.yml

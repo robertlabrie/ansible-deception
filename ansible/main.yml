@@ -10,5 +10,20 @@
     set_fact:
       flushed: false
 
+  # cleanup body and header file if present
+  - file:
+      path: "{{bodyfile}}"
+      state: absent
+  - file:
+      path: "{{headerfile}}"
+      state: absent
+### BEGIN CUSTOM ROUTES ###
+- include: root.yml
+  when:
+    - env.REQUEST_PATH == "/"
+    - flushed == false
+### END CUSTOM ROUTES ###
+
+# default route is to fetch a static asset, or throw a 404 if not found
 - include: static.yml
   when: flushed == false

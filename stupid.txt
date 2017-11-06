@@ -1,1 +1,2 @@
 sudo pip install jmespath
+gem install sinatra-contrib
