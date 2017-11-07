@@ -8,5 +8,8 @@
       {% include "./upload_form.j2" %}
     </div>
   </div>
+  {% for f in image_files.files %}
+  <img src="/images/{{ f.path | replace(datadir,'') | replace('/upload_','') | replace('.jpg','') }}"><br>
+  {% endfor %}
 </body>
 </html>

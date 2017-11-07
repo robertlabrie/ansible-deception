@@ -1,0 +1,31 @@
+- hosts:
+  - local
+  tasks:
+  - debug:
+      msg: "image path requested {{ env.REQUEST_PATH }}"
+  - name: get_image_id_from_path
+    set_fact:
+      image_id: "{{ env.REQUEST_PATH.split('/')[2]}}"
+  - name: get_full_image_path
+    set_fact:
+      file_path: "{{datadir}}/upload_{{image_id}}.jpg"
+  - debug:
+      msg: "image_id {{ image_id }} file_path {{ file_path }}"
+  - name: stat static asset
+    stat: path={{file_path}}
+    register: file
+  - name: copy file if it exists
+    copy: src={{file_path}} dest={{bodyfile}}
+    when: file.stat.exists
+  - name: set_content_type
+    set_fact:
+      http_response_Content__Type: "image/jpeg"
+  - name: "http_response_status_200"
+    set_fact:
+      http_response_status: 200
+    when: file.stat.exists
+  - name: "http_response_status_404"
+    set_fact:
+      http_response_status: 404
+    when: file.stat.exists == False
+- include: flush.yml
