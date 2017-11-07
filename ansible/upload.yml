@@ -1,0 +1,27 @@
+- hosts:
+  - local
+  tasks:
+  - debug:
+      msg: "executing upload handler"
+  - name: "generate_image_uuid"
+    set_fact:
+      upload_image_uuid: "{{ 9999999999999999999999 | random | to_uuid }}"
+  - name: copy image from tempfile to warehouse
+    copy: src={{tempfile}} dest={{datadir}}/upload_{{ upload_image_uuid }}.jpg
+  - name: write description
+    copy:
+      content: "{{params.description}}"
+      dest: "{{datadir}}/description_{{ upload_image_uuid }}.jpg"
+  - name: "http_response_status_302"
+    set_fact:
+      http_response_status: 302
+  - name: "http_response_Location"
+    set_fact:
+      http_response_Location: /
+  - name: empty bodyfile
+    copy:
+      content: ""
+      dest: "{{bodyfile}}"
+      force: no
+      mode: 0555
+- include: flush.yml

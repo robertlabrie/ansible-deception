@@ -5,7 +5,7 @@
   - local
   tasks:
   - debug:
-      msg: "REQUEST_PATH == {{env.REQUEST_PATH}}"
+      msg: "REQUEST_PATH == {{env.REQUEST_PATH}} REQUEST_METHOD == {{env.REQUEST_METHOD}}"
   - name: "set flushed initial state"
     set_fact:
       flushed: false
@@ -21,7 +21,25 @@
 - include: root.yml
   when:
     - env.REQUEST_PATH == "/"
+    - env.REQUEST_METHOD == "GET"
     - flushed == false
+- include: 302test.yml
+  when:
+    - env.REQUEST_PATH == "/302"
+    - env.REQUEST_METHOD == "GET"
+    - flushed == false
+- include: images.yml
+  when:
+    - env.REQUEST_PATH | search ("/images/")
+    - env.REQUEST_METHOD == "GET"
+    - flushed == false
+
+- include: upload.yml
+  when:
+    - env.REQUEST_PATH == "/upload"
+    - env.REQUEST_METHOD == "POST"
+    - flushed == false
+
 ### END CUSTOM ROUTES ###
 
 # default route is to fetch a static asset, or throw a 404 if not found

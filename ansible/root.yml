@@ -3,8 +3,18 @@
   tasks:
   - debug:
       msg: "executing root route"
+# read this, task parameter vs action parameter -- what a sack of crap https://stackoverflow.com/questions/43601357/ansible-get-list-of-files-printed-using-find-module
+  - name: get image list
+    find:
+      paths: "{{datadir}}"
+      patterns: "upload_*.jpg"
+    register: image_files
+  - debug: msg={{image_files}}
   - template:
       src: ../template_assets/index.j2
       dest: "{{bodyfile}}"
-      
+  - name: "http_response_status_200"
+    set_fact:
+      http_response_status: 200
+
 - include: flush.yml

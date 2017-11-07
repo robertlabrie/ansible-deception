@@ -1,0 +1,18 @@
+- hosts:
+  - local
+  tasks:
+  - debug:
+      msg: "executing 302 handler"
+  - name: "http_response_status_302"
+    set_fact:
+      http_response_status: 302
+  - name: "http_response_Location"
+    set_fact:
+      http_response_Location: /
+  - name: empty bodyfile
+    copy:
+      content: ""
+      dest: "{{bodyfile}}"
+      force: no
+      mode: 0555
+- include: flush.yml
