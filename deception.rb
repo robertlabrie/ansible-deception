@@ -2,6 +2,7 @@
 require 'sinatra'
 require 'sinatra/multi_route'
 require 'json'
+set :server, 'webrick'
 route :get, :post, '/*' do
   # puts "#{request.to_yaml}"
   payload = {}

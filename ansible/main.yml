@@ -23,11 +23,11 @@
     - env.REQUEST_PATH == "/"
     - env.REQUEST_METHOD == "GET"
     - flushed == false
-- include: 302test.yml
-  when:
-    - env.REQUEST_PATH == "/302"
-    - env.REQUEST_METHOD == "GET"
-    - flushed == false
+# - include: 302test.yml
+#   when:
+#     - env.REQUEST_PATH == "/302"
+#     - env.REQUEST_METHOD == "GET"
+#     - flushed == false
 - include: images.yml
   when:
     - env.REQUEST_PATH | search ("/images/")
